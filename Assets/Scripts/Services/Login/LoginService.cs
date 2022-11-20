@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Core.Connection.Messages;
 using MmoShared.Messages.Login;
+using MmoShared.Messages.Login.Domain;
 using MmoShared.Messages.Login.Register;
 using Zenject;
 
@@ -13,6 +14,8 @@ namespace Services.Login
 
         [Inject]
         private IMessageReceiver _messageReceiver;
+
+        public UserInfo UserInfo { get; private set; }
 
         public async Task<LoginResultSync> Login(string username, string password)
         {
@@ -27,8 +30,6 @@ namespace Services.Login
             
             _messageReceiver.Subscribe<LoginResultSync>(OnResult);
 
-            //BCrypt.Net.BCrypt.HashPassword(password);
-            
             LoginNotify loginNotify = new LoginNotify()
             {
                 Username = username,
@@ -40,6 +41,11 @@ namespace Services.Login
             while (resultSync == null)
             {
                 await Task.Yield();
+            }
+
+            if (resultSync.ResultCode == LoginResultCode.Success)
+            {
+                UserInfo = resultSync.UserInfo;
             }
             
             return resultSync;
@@ -69,6 +75,11 @@ namespace Services.Login
             while (resultSync == null)
             {
                 await Task.Yield();
+            }
+
+            if (resultSync.ResultCode == RegisterResultCode.Success)
+            {
+                UserInfo = resultSync.UserInfo;
             }
             
             return resultSync;

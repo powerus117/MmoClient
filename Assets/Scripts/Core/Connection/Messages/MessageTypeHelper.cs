@@ -7,11 +7,11 @@ namespace Core.Connection.Messages
 {
     public class MessageTypeHelper
     {
-        public static readonly Dictionary<uint, Type> IdToTypeMap;
+        public static readonly Dictionary<MessageId, Type> IdToTypeMap;
 
         static MessageTypeHelper()
         {
-            IdToTypeMap = new Dictionary<uint, Type>();
+            IdToTypeMap = new Dictionary<MessageId, Type>();
 
             IEnumerable<Type> messageTypes = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(assembly => assembly.GetTypes()).Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(Message)));

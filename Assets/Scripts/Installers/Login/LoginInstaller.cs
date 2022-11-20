@@ -27,8 +27,6 @@ namespace Installers.Login
             Container.Bind().FromInstance(_loginTabPresenter);
             Container.Bind().FromInstance(_registerTabPresenter);
             Container.Bind<LoginDialogPresenter>().FromInstance(_loginDialogPresenter);
-
-            Container.BindInterfacesAndSelfTo<LoginService>().AsSingle().NonLazy();
         }
     }
 }

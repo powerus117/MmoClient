@@ -1,7 +1,11 @@
-﻿using Login.Domain;
+﻿using Core.SceneLoading;
+using Core.Signals;
+using Login.Domain;
+using Login.Signals;
 using Login.Tabs;
 using UniRx;
 using UnityEngine;
+using Zenject;
 
 namespace Login
 {
@@ -13,6 +17,12 @@ namespace Login
         [SerializeField]
         private RegisterTabPresenter _registerTabPresenter;
 
+        [Inject]
+        private ISignalManager _signalManager;
+
+        [Inject]
+        private ISceneLoader _sceneLoader;
+
         private readonly CompositeDisposable _modelSubscriptions = new CompositeDisposable();
         private LoginScreenModel _model = new LoginScreenModel();
 
@@ -22,6 +32,8 @@ namespace Login
             
             _loginTabPresenter.RegisterClicked += LoginTabPresenterOnRegisterClicked;
             _registerTabPresenter.BackClicked += RegisterTabPresenterOnBackClicked;
+            
+            _signalManager.Subscribe<LoggedInSignal>(OnLoggedInSignal);
         }
 
         private void OnDestroy()
@@ -30,6 +42,8 @@ namespace Login
             
             _loginTabPresenter.RegisterClicked -= LoginTabPresenterOnRegisterClicked;
             _registerTabPresenter.BackClicked -= RegisterTabPresenterOnBackClicked;
+            
+            _signalManager.Unsubscribe<LoggedInSignal>(OnLoggedInSignal);
         }
         
         private void OnScreenStateChanged(LoginScreenState loginScreenState)
@@ -46,6 +60,11 @@ namespace Login
         private void RegisterTabPresenterOnBackClicked()
         {
             _model.LoginScreenState.Value = LoginScreenState.Login;
+        }
+        
+        private void OnLoggedInSignal(LoggedInSignal signal)
+        {
+            _sceneLoader.LoadScene(SceneNames.Game);
         }
     }
 }

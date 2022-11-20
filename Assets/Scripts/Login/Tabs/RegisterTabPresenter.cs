@@ -1,6 +1,8 @@
 ﻿using System;
 using Core.Connection;
+using Core.Signals;
 using Login.Dialogs;
+using Login.Signals;
 using MmoShared.Messages.Login.Register;
 using Services.Login;
 using TMPro;
@@ -38,6 +40,9 @@ namespace Login.Tabs
 
         [Inject]
         private IConnectionManager _connectionManager;
+        
+        [Inject]
+        private ISignalManager _signalManager;
 
         private readonly CompositeDisposable _viewSubscriptions = new CompositeDisposable();
         
@@ -77,6 +82,11 @@ namespace Login.Tabs
             
             _dialogPresenter.DisplayText(result.ResultCode == RegisterResultCode.Success ? "Register successful!" :
                 "Register failed with error: " + result.ResultCode);
+            
+            if (result.ResultCode == RegisterResultCode.Success)
+            {
+                _signalManager.Send(new LoggedInSignal());
+            }
         }
         
         private void OnBackClicked()

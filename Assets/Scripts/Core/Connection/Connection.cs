@@ -4,6 +4,7 @@ using System.IO;
 using System.Net.Sockets;
 using Core.Connection.Messages;
 using MmoShared.Messages;
+using Newtonsoft.Json;
 using ProtoBuf;
 using ProtoBuf.Meta;
 using UnityEngine;
@@ -51,8 +52,7 @@ namespace Core.Connection
                 try
                 {
                     // Read first uint as message id
-                    ushort msgId = _binaryReader.ReadUInt16();
-                    Debug.Log("Received message ID " + msgId);
+                    MessageId msgId = (MessageId)_binaryReader.ReadUInt16();
 
                     if (MessageTypeHelper.IdToTypeMap.TryGetValue(msgId, out var messageType))
                     {
@@ -66,6 +66,8 @@ namespace Core.Connection
 
                         Message readMessage = (Message)Convert.ChangeType(deserializedMessage, messageType);
                         _incomingMessageQueue.Enqueue(readMessage);
+                        
+                        Debug.Log($"Received message {msgId} {JsonConvert.SerializeObject(readMessage)}");
                     }
                 }
                 catch (Exception e)
@@ -107,12 +109,12 @@ namespace Core.Connection
             {
                 if (MessageTypeHelper.IdToTypeMap.TryGetValue(message.Id, out var messageTypeInfo))
                 {
-                    _binaryWriter.Write(message.Id);
+                    _binaryWriter.Write((ushort)message.Id);
 
                     RuntimeTypeModel.Default.SerializeWithLengthPrefix(_networkStream, message, message.GetType(),
                         PrefixStyle.Base128, 0);
 
-                    Debug.Log("Sent: " + message.Id);
+                    Debug.Log($"Sent message {message.Id}: {JsonConvert.SerializeObject(message)}");
                 }
             }
             catch (Exception e)

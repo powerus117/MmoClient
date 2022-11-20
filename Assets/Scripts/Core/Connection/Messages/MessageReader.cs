@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Core.Connection.Messages
@@ -14,6 +15,8 @@ namespace Core.Connection.Messages
             _connection = connection;
             _thread = new Thread(ReadThread);
             _thread.Start();
+            
+            ProcessMessages();
         }
 
         private void ReadThread()
@@ -23,8 +26,24 @@ namespace Core.Connection.Messages
                 while (_connection.IsConnected)
                 {
                     _connection.ReadMessages();
-                    
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                throw;
+            }
+        }
+
+        private async void ProcessMessages()
+        {
+            try
+            {
+                while (_connection.IsConnected)
+                {
                     _connection.ProcessMessages();
+
+                    await Task.Delay(10);
                 }
             }
             catch (Exception e)

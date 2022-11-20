@@ -21,7 +21,7 @@ namespace Installers
                 await Task.Yield();
             }
             
-            _sceneLoader.LoadScene("Login");
+            _sceneLoader.LoadScene(SceneNames.Login);
         }
     }
 }

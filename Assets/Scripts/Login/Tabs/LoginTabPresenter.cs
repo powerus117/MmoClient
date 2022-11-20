@@ -1,6 +1,8 @@
 ﻿using System;
 using Core.Connection;
+using Core.Signals;
 using Login.Dialogs;
+using Login.Signals;
 using MmoShared.Messages.Login;
 using Services.Login;
 using TMPro;
@@ -36,6 +38,9 @@ namespace Login.Tabs
         [Inject]
         private IConnectionManager _connectionManager;
 
+        [Inject]
+        private ISignalManager _signalManager;
+
         private readonly CompositeDisposable _viewSubscriptions = new CompositeDisposable();
         
         private void Awake()
@@ -68,6 +73,11 @@ namespace Login.Tabs
             
             _dialogPresenter.DisplayText(result.ResultCode == LoginResultCode.Success ? "Login successful!" :
                 "Login failed with error: " + result.ResultCode);
+
+            if (result.ResultCode == LoginResultCode.Success)
+            {
+                _signalManager.Send(new LoggedInSignal());
+            }
         }
         
         private void OnRegisterClicked()
