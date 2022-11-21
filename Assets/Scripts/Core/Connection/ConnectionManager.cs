@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using Core.Connection.Messages;
 using MmoShared.Messages;
+using MmoShared.Messages.Core;
 using UnityEngine;
 using Zenject;
 
@@ -25,6 +26,7 @@ namespace Core.Connection
 
         public void Dispose()
         {
+            SendMessage(new QuitNotify());
             Close();
         }
 

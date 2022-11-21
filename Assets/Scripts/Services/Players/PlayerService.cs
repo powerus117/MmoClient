@@ -2,6 +2,7 @@
 using Core.Connection.Messages;
 using Core.Helpers;
 using MmoShared.Messages.Players;
+using MmoShared.Messages.Players.Movement;
 using Services.Players.Domain;
 using UniRx;
 using UnityEngine;
@@ -25,12 +26,16 @@ namespace Services.Players
         public void Initialize()
         {
             _messageReceiver.Subscribe<LoadedSync>(OnLoadedSync);
+            _messageReceiver.Subscribe<AddPlayerSync>(OnAddPlayerSync);
+            _messageReceiver.Subscribe<RemovePlayerSync>(OnRemovePlayerSync);
             _messageReceiver.Subscribe<PlayerMovedSync>(OnPlayerMovedSync);
         }
 
         public void Dispose()
         {
             _messageReceiver.Unsubscribe<LoadedSync>(OnLoadedSync);
+            _messageReceiver.Unsubscribe<AddPlayerSync>(OnAddPlayerSync);
+            _messageReceiver.Unsubscribe<RemovePlayerSync>(OnRemovePlayerSync);
             _messageReceiver.Unsubscribe<PlayerMovedSync>(OnPlayerMovedSync);
         }
 
@@ -50,6 +55,16 @@ namespace Services.Players
             {
                 _players.Add(player.Key, new PlayerInfo(player.Value.Position.ToVector2Int()));
             }
+        }
+        
+        private void OnAddPlayerSync(AddPlayerSync sync)
+        {
+            _players.Add(sync.UserId, new PlayerInfo(sync.Position.ToVector2Int()));
+        }
+        
+        private void OnRemovePlayerSync(RemovePlayerSync sync)
+        {
+            _players.Remove(sync.UserId);
         }
         
         private void OnPlayerMovedSync(PlayerMovedSync sync)

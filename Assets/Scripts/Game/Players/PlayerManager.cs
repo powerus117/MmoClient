@@ -58,7 +58,12 @@ namespace Game.Players
 
         private void OnPlayerRemoved(DictionaryRemoveEvent<ulong, PlayerInfo> removeEvent)
         {
-            throw new NotImplementedException();
+            if (_players.TryGetValue(removeEvent.Key, out var playerPresenter))
+            {
+                Destroy(playerPresenter.gameObject);
+            }
+
+            _players.Remove(removeEvent.Key);
         }
 
         private void OnPlayerAdded(DictionaryAddEvent<ulong, PlayerInfo> addEvent)
