@@ -54,14 +54,14 @@ namespace Services.Players
             foreach (var player in sync.Players)
             {
                 var playerData = player.Value;
-                _players.Add(player.Key, new PlayerInfo(playerData.Position.ToVector2Int(), playerData.Color));
+                _players.Add(player.Key, new PlayerInfo(playerData.UserInfo, playerData.Position.ToVector2Int(), playerData.Color));
             }
         }
         
         private void OnAddPlayerSync(AddPlayerSync sync)
         {
             var playerData = sync.PlayerData;
-            _players.Add(sync.UserId, new PlayerInfo(playerData.Position.ToVector2Int(), playerData.Color));
+            _players.Add(sync.PlayerData.UserInfo.UserId, new PlayerInfo(playerData.UserInfo, playerData.Position.ToVector2Int(), playerData.Color));
         }
         
         private void OnRemovePlayerSync(RemovePlayerSync sync)
