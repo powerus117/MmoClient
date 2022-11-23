@@ -72,7 +72,7 @@ namespace Core.Connection
 
         public void SendMessage(Message message)
         {
-            _connection.AddMessage(message);
+            _connection?.AddMessage(message);
         }
 
         private void Close()

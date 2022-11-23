@@ -464,7 +464,7 @@ MonoBehaviour:
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
   m_Text: 
   m_CaretBlinkRate: 0.85
-  m_CaretWidth: 1
+  m_CaretWidth: 2
   m_ReadOnly: 0
   m_RichText: 1
   m_GlobalFontAsset: {fileID: 0}
@@ -639,7 +639,7 @@ MonoBehaviour:
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
   m_Text: 
   m_CaretBlinkRate: 0.85
-  m_CaretWidth: 1
+  m_CaretWidth: 2
   m_ReadOnly: 0
   m_RichText: 1
   m_GlobalFontAsset: {fileID: 0}
@@ -736,7 +736,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 1627421465}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &502429503
@@ -2167,6 +2167,7 @@ GameObject:
   m_Component:
   - component: {fileID: 949684588}
   - component: {fileID: 949684589}
+  - component: {fileID: 949684590}
   m_Layer: 5
   m_Name: RegisterContainer
   m_TagString: Untagged
@@ -2218,6 +2219,24 @@ MonoBehaviour:
   _passwordRepeatInputField: {fileID: 1823463803}
   _registerButton: {fileID: 1496696853}
   _backButton: {fileID: 1919989702}
+--- !u!114 &949684590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 949684587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8a057451eec4350a4a0796175c5a03a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _preSelected: {fileID: 304817646}
+  _selectables:
+  - {fileID: 304817646}
+  - {fileID: 449199978}
+  - {fileID: 1823463803}
+  _submitButtonClick: {fileID: 0}
 --- !u!1 &952343893
 GameObject:
   m_ObjectHideFlags: 0
@@ -3677,7 +3696,7 @@ MonoBehaviour:
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
   m_Text: 
   m_CaretBlinkRate: 0.85
-  m_CaretWidth: 1
+  m_CaretWidth: 2
   m_ReadOnly: 0
   m_RichText: 1
   m_GlobalFontAsset: {fileID: 0}
@@ -4458,7 +4477,7 @@ MonoBehaviour:
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
   m_Text: 
   m_CaretBlinkRate: 0.85
-  m_CaretWidth: 1
+  m_CaretWidth: 2
   m_ReadOnly: 0
   m_RichText: 1
   m_GlobalFontAsset: {fileID: 0}
@@ -4571,7 +4590,7 @@ MonoBehaviour:
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
+    m_ColorMultiplier: 2
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
@@ -5452,6 +5471,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2139090071}
   - component: {fileID: 2139090072}
+  - component: {fileID: 2139090073}
   m_Layer: 5
   m_Name: LoginContainer
   m_TagString: Untagged
@@ -5500,3 +5520,20 @@ MonoBehaviour:
   _passwordInputField: {fileID: 1753305511}
   _loginButton: {fileID: 1627421467}
   _registerButton: {fileID: 790251360}
+--- !u!114 &2139090073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2139090070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8a057451eec4350a4a0796175c5a03a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _preSelected: {fileID: 1429672266}
+  _selectables:
+  - {fileID: 1429672266}
+  - {fileID: 1753305511}
+  _submitButtonClick: {fileID: 1627421467}
