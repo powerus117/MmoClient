@@ -9,6 +9,9 @@ namespace Game.Players
     {
         [SerializeField]
         private Transform _playerVisual;
+
+        [SerializeField]
+        private MeshRenderer _coloredMesh;
         
         private PlayerModel _model;
 
@@ -19,7 +22,8 @@ namespace Game.Players
         {
             _model = model;
 
-            _model.Position.Subscribe(OnPositionChanged).AddTo(_modelSubscriptions);
+            _model.PlayerInfo.Position.Subscribe(OnPositionChanged).AddTo(_modelSubscriptions);
+            _coloredMesh.material.color = _model.PlayerInfo.Color;
         }
 
         private void OnPositionChanged(Vector2Int position)

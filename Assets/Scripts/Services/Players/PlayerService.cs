@@ -53,13 +53,15 @@ namespace Services.Players
 
             foreach (var player in sync.Players)
             {
-                _players.Add(player.Key, new PlayerInfo(player.Value.Position.ToVector2Int()));
+                var playerData = player.Value;
+                _players.Add(player.Key, new PlayerInfo(playerData.Position.ToVector2Int(), playerData.Color));
             }
         }
         
         private void OnAddPlayerSync(AddPlayerSync sync)
         {
-            _players.Add(sync.UserId, new PlayerInfo(sync.Position.ToVector2Int()));
+            var playerData = sync.PlayerData;
+            _players.Add(sync.UserId, new PlayerInfo(playerData.Position.ToVector2Int(), playerData.Color));
         }
         
         private void OnRemovePlayerSync(RemovePlayerSync sync)

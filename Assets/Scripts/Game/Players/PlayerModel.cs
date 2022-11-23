@@ -1,15 +1,14 @@
-﻿using UniRx;
-using UnityEngine;
+﻿using Services.Players.Domain;
 
 namespace Game.Players
 {
     public class PlayerModel
     {
-        public ReactiveProperty<Vector2Int> Position { get; }
+        public PlayerInfo PlayerInfo { get; }
 
-        public PlayerModel(ReactiveProperty<Vector2Int> position)
+        public PlayerModel(PlayerInfo playerInfo)
         {
-            Position = position;
+            PlayerInfo = playerInfo;
         }
     }
 }

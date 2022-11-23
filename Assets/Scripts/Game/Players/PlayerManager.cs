@@ -77,14 +77,14 @@ namespace Game.Players
             {
                 var newPlayerObject = Instantiate(_playerPrefab, WorldGrid.GetPosition(playerInfo.Position.Value), Quaternion.identity);
                 var newPlayer = newPlayerObject.GetComponent<PlayerPresenter>();
-                newPlayer.Initialize(new PlayerModel(playerInfo.Position));
+                newPlayer.Initialize(new PlayerModel(playerInfo));
                 _players[userId] = newPlayer;
             }
             else
             {
                 _ownPlayer.transform.position = WorldGrid.GetPosition(playerInfo.Position.Value);
                 var newPlayer = _ownPlayer.GetComponent<PlayerPresenter>();
-                newPlayer.Initialize(new PlayerModel(playerInfo.Position));
+                newPlayer.Initialize(new PlayerModel(playerInfo));
                 _players[userId] = newPlayer;
             }
         }

@@ -127,6 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerVisual: {fileID: 744366605006731785}
+  _coloredMesh: {fileID: 744366605006731787}
 --- !u!1 &744366605006731789
 GameObject:
   m_ObjectHideFlags: 0
