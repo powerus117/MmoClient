@@ -1,11 +1,12 @@
-﻿using TMPro;
+using Core.UI;
+using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Login.Dialogs
 {
-    public class LoginDialogPresenter : MonoBehaviour
+    public class LoginDialogPresenter : UIWindow<LoginDialogParams>
     {
         [SerializeField]
         private TMP_Text _text;
@@ -17,10 +18,10 @@ namespace Login.Dialogs
         private GameObject _loadingContainer;
 
         private readonly CompositeDisposable _viewSubscriptions = new CompositeDisposable();
-        
+
         private void Awake()
         {
-            _closeButton.OnClickAsObservable().Subscribe(_ => OnCloseClicked()).AddTo(_viewSubscriptions);
+            _closeButton.OnClickAsObservable().Subscribe(_ => Close()).AddTo(_viewSubscriptions);
         }
 
         private void OnDestroy()
@@ -28,17 +29,10 @@ namespace Login.Dialogs
             _viewSubscriptions.Dispose();
         }
 
-        private void OnCloseClicked()
+        protected override void OnParamsSet(LoginDialogParams parameters)
         {
-            gameObject.SetActive(false);
-        }
-
-        public void DisplayText(string text, bool loadingIcon = false)
-        {
-            _text.text = text;
-            
-            //_loadingContainer.gameObject.SetActive(loadingIcon);
-            gameObject.SetActive(true);
+            _text.text = parameters.Text;
+            _loadingContainer.SetActive(parameters.ShowLoadingIcon);
         }
     }
 }

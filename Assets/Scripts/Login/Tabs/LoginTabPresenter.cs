@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using Core.Connection;
 using Core.Signals;
+using Core.UI;
 using Login.Dialogs;
 using Login.Signals;
 using MmoShared.Messages.Login;
@@ -22,16 +23,16 @@ namespace Login.Tabs
 
         [SerializeField]
         private TMP_InputField _passwordInputField;
-        
+
         [SerializeField]
         private Button _loginButton;
 
         [SerializeField]
         private Button _registerButton;
-        
+
         [Inject]
-        private LoginDialogPresenter _dialogPresenter;
-        
+        private IUIService _uiService;
+
         [Inject]
         private ILoginService _loginService;
 
@@ -42,7 +43,7 @@ namespace Login.Tabs
         private ISignalManager _signalManager;
 
         private readonly CompositeDisposable _viewSubscriptions = new CompositeDisposable();
-        
+
         private void Awake()
         {
             _loginButton.OnClickAsObservable().Subscribe(_ => OnLoginClicked()).AddTo(_viewSubscriptions);
@@ -58,28 +59,42 @@ namespace Login.Tabs
         {
             if (!_connectionManager.IsConnected)
             {
-                _dialogPresenter.DisplayText("Connecting...", true);
+                await _uiService.Open<LoginDialogPresenter, LoginDialogParams>(
+                    UIAddresses.LoginDialog,
+                    new LoginDialogParams { Text = "Connecting...", ShowLoadingIcon = true },
+                    UILayer.Dialog);
+
                 await _connectionManager.Connect();
 
                 if (!_connectionManager.IsConnected)
                 {
-                    _dialogPresenter.DisplayText("Connection failed");
+                    await _uiService.Open<LoginDialogPresenter, LoginDialogParams>(
+                        UIAddresses.LoginDialog,
+                        new LoginDialogParams { Text = "Connection failed" },
+                        UILayer.Dialog);
                     return;
                 }
             }
-            
-            _dialogPresenter.DisplayText("Logging in...", true);
+
+            var dialog = await _uiService.Open<LoginDialogPresenter, LoginDialogParams>(
+                UIAddresses.LoginDialog,
+                new LoginDialogParams { Text = "Logging in...", ShowLoadingIcon = true },
+                UILayer.Dialog);
             var result = await _loginService.Login(_usernameInputField.text, _passwordInputField.text);
-            
-            _dialogPresenter.DisplayText(result.ResultCode == LoginResultCode.Success ? "Login successful!" :
-                "Login failed with error: " + result.ResultCode);
+
+            dialog.SetParams(new LoginDialogParams
+            {
+                Text = result.ResultCode == LoginResultCode.Success
+                    ? "Login successful!"
+                    : "Login failed with error: " + result.ResultCode
+            });
 
             if (result.ResultCode == LoginResultCode.Success)
             {
                 _signalManager.Send(new LoggedInSignal());
             }
         }
-        
+
         private void OnRegisterClicked()
         {
             RegisterClicked?.Invoke();

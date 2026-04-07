@@ -2,6 +2,7 @@ using Core.Connection;
 using Core.Connection.Messages;
 using Core.SceneLoading;
 using Core.Signals;
+using Core.UI;
 using Services.Login;
 using Services.Players;
 using Zenject;
@@ -17,6 +18,7 @@ namespace Installers
             // Core
             Container.BindInterfacesAndSelfTo<SceneLoader>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<SignalManager>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<UIService>().AsSingle().NonLazy();
             
             Container.BindInterfacesAndSelfTo<PlayerService>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<LoginService>().AsSingle().NonLazy();

@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using Core.Connection;
 using Core.Signals;
+using Core.UI;
 using Login.Dialogs;
 using Login.Signals;
 using MmoShared.Messages.Login.Register;
@@ -22,10 +23,10 @@ namespace Login.Tabs
 
         [SerializeField]
         private TMP_InputField _passwordInputField;
-        
+
         [SerializeField]
         private TMP_InputField _passwordRepeatInputField;
-        
+
         [SerializeField]
         private Button _registerButton;
 
@@ -33,19 +34,19 @@ namespace Login.Tabs
         private Button _backButton;
 
         [Inject]
-        private LoginDialogPresenter _dialogPresenter;
+        private IUIService _uiService;
 
         [Inject]
         private ILoginService _loginService;
 
         [Inject]
         private IConnectionManager _connectionManager;
-        
+
         [Inject]
         private ISignalManager _signalManager;
 
         private readonly CompositeDisposable _viewSubscriptions = new CompositeDisposable();
-        
+
         private void Awake()
         {
             _registerButton.OnClickAsObservable().Subscribe(_ => OnRegisterClicked()).AddTo(_viewSubscriptions);
@@ -61,34 +62,51 @@ namespace Login.Tabs
         {
             if (!_passwordInputField.text.Equals(_passwordRepeatInputField.text))
             {
-                _dialogPresenter.DisplayText("Passwords do not match");
+                await _uiService.Open<LoginDialogPresenter, LoginDialogParams>(
+                    UIAddresses.LoginDialog,
+                    new LoginDialogParams { Text = "Passwords do not match" },
+                    UILayer.Dialog);
                 return;
             }
 
             if (!_connectionManager.IsConnected)
             {
-                _dialogPresenter.DisplayText("Connecting...", true);
+                await _uiService.Open<LoginDialogPresenter, LoginDialogParams>(
+                    UIAddresses.LoginDialog,
+                    new LoginDialogParams { Text = "Connecting...", ShowLoadingIcon = true },
+                    UILayer.Dialog);
+
                 await _connectionManager.Connect();
 
                 if (!_connectionManager.IsConnected)
                 {
-                    _dialogPresenter.DisplayText("Connection failed");
+                    await _uiService.Open<LoginDialogPresenter, LoginDialogParams>(
+                        UIAddresses.LoginDialog,
+                        new LoginDialogParams { Text = "Connection failed" },
+                        UILayer.Dialog);
                     return;
                 }
             }
-            
-            _dialogPresenter.DisplayText("Registering...", true);
+
+            var dialog = await _uiService.Open<LoginDialogPresenter, LoginDialogParams>(
+                UIAddresses.LoginDialog,
+                new LoginDialogParams { Text = "Registering...", ShowLoadingIcon = true },
+                UILayer.Dialog);
             var result = await _loginService.Register(_usernameInputField.text, _passwordInputField.text);
-            
-            _dialogPresenter.DisplayText(result.ResultCode == RegisterResultCode.Success ? "Register successful!" :
-                "Register failed with error: " + result.ResultCode);
-            
+
+            dialog.SetParams(new LoginDialogParams
+            {
+                Text = result.ResultCode == RegisterResultCode.Success
+                    ? "Register successful!"
+                    : "Register failed with error: " + result.ResultCode
+            });
+
             if (result.ResultCode == RegisterResultCode.Success)
             {
                 _signalManager.Send(new LoggedInSignal());
             }
         }
-        
+
         private void OnBackClicked()
         {
             BackClicked?.Invoke();
