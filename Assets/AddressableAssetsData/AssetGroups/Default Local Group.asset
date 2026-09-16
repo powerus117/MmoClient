@@ -13,13 +13,16 @@ MonoBehaviour:
   m_Name: Default Local Group
   m_EditorClassIdentifier: 
   m_GroupName: Default Local Group
-  m_Data:
-    m_SerializedData: []
   m_GUID: 5060922d5d1380949b19317cb4acfc89
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 69823f9f023bfaf42b9f4c487d3cdf1f
+    m_Address: UI/Dialogs/LoginDialog
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 6a5bb4760f8088147b6eae29da96eeaa, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: baad24ec9235fcf449c471c36dc61cd5, type: 2}
     - {fileID: 11400000, guid: ecc9d6cfdbf012441b73953b6df8a8e8, type: 2}
+    - {fileID: 11400000, guid: baad24ec9235fcf449c471c36dc61cd5, type: 2}
