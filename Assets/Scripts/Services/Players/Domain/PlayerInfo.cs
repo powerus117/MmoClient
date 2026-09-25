@@ -1,4 +1,5 @@
 ﻿using MmoShared.Messages.Login.Domain;
+using MmoShared.Messages.Players.Domain;
 using UniRx;
 using UnityEngine;
 
@@ -6,25 +7,18 @@ namespace Services.Players.Domain
 {
     public class PlayerInfo
     {
-        public UserInfo UserInfo { get; }
-        public Color Color { get; }
+        public long PlayerId { get; set; }
+        public string CharacterName { get; set; }
+        public AccountType AccountType { get; set; }
+        
         public ReactiveProperty<Vector2Int> Position { get; }
 
-        public PlayerInfo(UserInfo userInfo, Vector2Int position, string htmlColor)
+        public PlayerInfo(PlayerDataDto playerDataDto)
         {
-            UserInfo = userInfo;
-            htmlColor = "#" + htmlColor;
-            if (ColorUtility.TryParseHtmlString(htmlColor, out var color))
-            {
-                Color = color;
-            }
-            else
-            {
-                Debug.LogError("Failed to convert color " + htmlColor);
-                Color = Color.red;
-            }
-            
-            Position = new ReactiveProperty<Vector2Int>(position);
+            PlayerId = playerDataDto.PlayerId;
+            CharacterName = playerDataDto.CharacterName;
+            AccountType = playerDataDto.AccountType;
+            Position = new ReactiveProperty<Vector2Int>(new Vector2Int(playerDataDto.Position.x, playerDataDto.Position.y));
         }
     }
 }

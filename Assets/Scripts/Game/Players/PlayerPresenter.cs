@@ -27,15 +27,14 @@ namespace Game.Players
         {
             _model = model;
 
-            _usernameText.text = model.PlayerInfo.UserInfo.Username;
+            _usernameText.text = model.PlayerInfo.CharacterName;
 
-            if (model.PlayerInfo.UserInfo.AccountType == AccountType.Admin)
+            if (model.PlayerInfo.AccountType == AccountType.Admin)
             {
                 _usernameText.color = Color.green;
             }
             
             _model.PlayerInfo.Position.Subscribe(OnPositionChanged).AddTo(_modelSubscriptions);
-            _coloredMesh.material.color = _model.PlayerInfo.Color;
         }
 
         private void OnPositionChanged(Vector2Int position)

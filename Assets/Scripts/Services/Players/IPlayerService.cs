@@ -6,7 +6,7 @@ namespace Services.Players
 {
     public interface IPlayerService
     {
-        IReadOnlyReactiveDictionary<ulong, PlayerInfo> Players { get; }
+        IReadOnlyReactiveDictionary<long, PlayerInfo> Players { get; }
         void MoveToPosition(Vector2Int position);
     }
 }

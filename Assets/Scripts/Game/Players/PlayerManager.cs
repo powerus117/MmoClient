@@ -24,9 +24,9 @@ namespace Game.Players
         [Inject]
         private ILoginService _loginService;
 
-        private Dictionary<ulong, PlayerPresenter> _players = new Dictionary<ulong, PlayerPresenter>();
+        private Dictionary<long, PlayerPresenter> _players = new();
 
-        private readonly CompositeDisposable _serviceSubscriptions = new CompositeDisposable();
+        private readonly CompositeDisposable _serviceSubscriptions = new();
 
         public void Initialize()
         {
@@ -51,12 +51,12 @@ namespace Game.Players
             throw new NotImplementedException();
         }
 
-        private void OnPlayerReplaced(DictionaryReplaceEvent<ulong, PlayerInfo> replaceEvent)
+        private void OnPlayerReplaced(DictionaryReplaceEvent<long, PlayerInfo> replaceEvent)
         {
             throw new NotImplementedException();
         }
 
-        private void OnPlayerRemoved(DictionaryRemoveEvent<ulong, PlayerInfo> removeEvent)
+        private void OnPlayerRemoved(DictionaryRemoveEvent<long, PlayerInfo> removeEvent)
         {
             if (_players.TryGetValue(removeEvent.Key, out var playerPresenter))
             {
@@ -66,14 +66,14 @@ namespace Game.Players
             _players.Remove(removeEvent.Key);
         }
 
-        private void OnPlayerAdded(DictionaryAddEvent<ulong, PlayerInfo> addEvent)
+        private void OnPlayerAdded(DictionaryAddEvent<long, PlayerInfo> addEvent)
         {
             AddPlayer(addEvent.Key, addEvent.Value);
         }
 
-        private void AddPlayer(ulong userId, PlayerInfo playerInfo)
+        private void AddPlayer(long userId, PlayerInfo playerInfo)
         {
-            if (userId != _loginService.UserInfo.UserId)
+            if (userId != _loginService.PlayerDataDto.PlayerId)
             {
                 var newPlayerObject = Instantiate(_playerPrefab, WorldGrid.GetPosition(playerInfo.Position.Value), Quaternion.identity);
                 var newPlayer = newPlayerObject.GetComponent<PlayerPresenter>();

@@ -3,6 +3,7 @@ using Core.Connection.Messages;
 using MmoShared.Messages.Login;
 using MmoShared.Messages.Login.Domain;
 using MmoShared.Messages.Login.Register;
+using MmoShared.Messages.Players.Domain;
 using Zenject;
 
 namespace Services.Login
@@ -15,7 +16,7 @@ namespace Services.Login
         [Inject]
         private IMessageReceiver _messageReceiver;
 
-        public UserInfo UserInfo { get; private set; }
+        public PlayerDataDto PlayerDataDto { get; private set; }
 
         public async Task<LoginResultSync> Login(string username, string password)
         {
@@ -45,7 +46,7 @@ namespace Services.Login
 
             if (resultSync.ResultCode == LoginResultCode.Success)
             {
-                UserInfo = resultSync.UserInfo;
+                PlayerDataDto = resultSync.PlayerDataDto;
             }
             
             return resultSync;
@@ -79,7 +80,7 @@ namespace Services.Login
 
             if (resultSync.ResultCode == RegisterResultCode.Success)
             {
-                UserInfo = resultSync.UserInfo;
+                PlayerDataDto = resultSync.PlayerDataDto;
             }
             
             return resultSync;

@@ -19,9 +19,9 @@ namespace Services.Players
         [Inject]
         private IMessageSender _messageSender;
 
-        private ReactiveDictionary<ulong, PlayerInfo> _players = new ReactiveDictionary<ulong, PlayerInfo>();
+        private ReactiveDictionary<long, PlayerInfo> _players = new();
         
-        public IReadOnlyReactiveDictionary<ulong, PlayerInfo> Players => _players;
+        public IReadOnlyReactiveDictionary<long, PlayerInfo> Players => _players;
 
         public void Initialize()
         {
@@ -54,19 +54,19 @@ namespace Services.Players
             foreach (var player in sync.Players)
             {
                 var playerData = player.Value;
-                _players.Add(player.Key, new PlayerInfo(playerData.UserInfo, playerData.Position.ToVector2Int(), playerData.Color));
+                _players.Add(player.Key, new PlayerInfo(playerData));
             }
         }
         
         private void OnAddPlayerSync(AddPlayerSync sync)
         {
-            var playerData = sync.PlayerData;
-            _players.Add(sync.PlayerData.UserInfo.UserId, new PlayerInfo(playerData.UserInfo, playerData.Position.ToVector2Int(), playerData.Color));
+            var playerData = sync.PlayerDataDto;
+            _players.Add(sync.PlayerDataDto.PlayerId, new PlayerInfo(playerData));
         }
         
         private void OnRemovePlayerSync(RemovePlayerSync sync)
         {
-            _players.Remove(sync.UserId);
+            _players.Remove(sync.PlayerId);
         }
         
         private void OnPlayerMovedSync(PlayerMovedSync sync)
